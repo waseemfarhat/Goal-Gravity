@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Goal Gravity — AI Habit Persistence Predictor</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- Particle Canvas -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- Noise Overlay -->
+<div class="noise-overlay"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <span class="logo-icon">⬡</span>
+    <span class="logo-text">GOAL<span class="accent">GRAVITY</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#dashboard">Dashboard</a></li>
+    <li><a href="#predict">Predict</a></li>
+    <li><a href="#habits">Habits</a></li>
+    <li><a href="#insights">Insights</a></li>
+  </ul>
+  <button class="nav-cta" onclick="scrollToPredict()">Run AI Scan</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg-text">GRAVITY</div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      AI-POWERED · REAL-TIME ANALYSIS
+    </div>
+    <h1 class="hero-title">
+      Your Goals Have<br/>
+      <span class="title-accent">Mass.</span><br/>
+      <span class="title-sub">Will They Survive?</span>
+    </h1>
+    <p class="hero-desc">
+      Goal Gravity uses neural pattern analysis to predict your habit persistence score — 
+      exposing the invisible forces pulling your goals into oblivion before it's too late.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="scrollToPredict()">
+        <span>Analyze My Habits</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="btn-ghost" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'})">
+        View Dashboard
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num" data-target="94">0</span><span class="stat-unit">%</span>
+        <span class="stat-label">Prediction Accuracy</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num" data-target="12800">0</span><span class="stat-unit">+</span>
+        <span class="stat-label">Habits Analyzed</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num" data-target="7">0</span><span class="stat-unit">x</span>
+        <span class="stat-label">Better Outcomes</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="gravity-orb">
+      <div class="orb-ring ring-1"></div>
+      <div class="orb-ring ring-2"></div>
+      <div class="orb-ring ring-3"></div>
+      <div class="orb-core">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+          <circle cx="30" cy="30" r="20" stroke="#ff2233" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <circle cx="30" cy="30" r="8" fill="#ff2233" opacity="0.9"/>
+          <line x1="30" y1="10" x2="30" y2="50" stroke="#ff2233" stroke-width="0.5" opacity="0.4"/>
+          <line x1="10" y1="30" x2="50" y2="30" stroke="#ff2233" stroke-width="0.5" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="orb-label">GRAVITATIONAL PULL</div>
+    </div>
+    <!-- Floating habit nodes -->
+    <div class="habit-node node-1" data-score="87">
+      <span class="node-icon">🏃</span>
+      <span class="node-name">Exercise</span>
+      <span class="node-score">87</span>
+    </div>
+    <div class="habit-node node-2" data-score="42">
+      <span class="node-icon">📚</span>
+      <span class="node-name">Reading</span>
+      <span class="node-score">42</span>
+    </div>
+    <div class="habit-node node-3" data-score="71">
+      <span class="node-icon">💧</span>
+      <span class="node-name">Hydration</span>
+      <span class="node-score">71</span>
+    </div>
+    <div class="habit-node node-4" data-score="28">
+      <span class="node-icon">🧘</span>
+      <span class="node-name">Meditation</span>
+      <span class="node-score">28</span>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="dashboard" id="dashboard">
+  <div class="section-header">
+    <span class="section-tag">// LIVE DASHBOARD</span>
+    <h2>Habit Persistence <span class="accent">Command Center</span></h2>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- Score Card -->
+    <div class="card card-score">
+      <div class="card-label">OVERALL GRAVITY SCORE</div>
+      <div class="score-ring">
+        <svg viewBox="0 0 120 120" width="120" height="120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#1a0008" stroke-width="8"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#ff2233" stroke-width="8"
+            stroke-dasharray="314" stroke-dashoffset="95"
+            stroke-linecap="round" transform="rotate(-90 60 60)"
+            class="score-arc"/>
+        </svg>
+        <div class="score-value">
+          <span class="score-num">69</span>
+          <span class="score-label">/ 100</span>
+        </div>
+      </div>
+      <div class="score-status">
+        <span class="status-dot status-medium"></span>
+        MODERATE PERSISTENCE
+      </div>
+      <div class="score-breakdown">
+        <div class="breakdown-item">
+          <span>Consistency</span><span class="accent">74%</span>
+        </div>
+        <div class="breakdown-item">
+          <span>Motivation Decay</span><span class="warn">↑ 18%</span>
+        </div>
+        <div class="breakdown-item">
+          <span>Environmental Pull</span><span class="accent">81%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streak Tracker -->
+    <div class="card card-streaks">
+      <div class="card-label">ACTIVE STREAKS</div>
+      <div class="streak-list">
+        <div class="streak-item">
+          <div class="streak-info">
+            <span class="streak-icon">🏃</span>
+            <div>
+              <div class="streak-name">Morning Run</div>
+              <div class="streak-sub">Started 23 days ago</div>
+            </div>
+          </div>
+          <div class="streak-count">
+            <span class="streak-num">23</span>
+            <span class="streak-unit">days</span>
+          </div>
+          <div class="streak-bar"><div class="streak-fill" style="width:76%"></div></div>
+        </div>
+        <div class="streak-item">
+          <div class="streak-info">
+            <span class="streak-icon">💧</span>
+            <div>
+              <div class="streak-name">Hydration Goal</div>
+              <div class="streak-sub">Started 8 days ago</div>
+            </div>
+          </div>
+          <div class="streak-count">
+            <span class="streak-num">8</span>
+            <span class="streak-unit">days</span>
+          </div>
+          <div class="streak-bar"><div class="streak-fill" style="width:27%"></div></div>
+        </div>
+        <div class="streak-item danger">
+          <div class="streak-info">
+            <span class="streak-icon">📚</span>
+            <div>
+              <div class="streak-name">Daily Reading</div>
+              <div class="streak-sub">⚠ At risk — 2 days missed</div>
+            </div>
+          </div>
+          <div class="streak-count">
+            <span class="streak-num">5</span>
+            <span class="streak-unit">days</span>
+          </div>
+          <div class="streak-bar"><div class="streak-fill danger-fill" style="width:17%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Prediction Chart -->
+    <div class="card card-chart">
+      <div class="card-label">AI PERSISTENCE FORECAST — 30 DAYS</div>
+      <div class="chart-wrapper">
+        <canvas id="forecastChart"></canvas>
+      </div>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="leg-dot red"></span>Predicted Drop-off</span>
+        <span class="legend-item"><span class="leg-dot green"></span>With AI Nudges</span>
+      </div>
+    </div>
+
+    <!-- AI Insights Panel -->
+    <div class="card card-insights">
+      <div class="card-label">AI CRITICAL ALERTS</div>
+      <div class="insight-list">
+        <div class="insight-item insight-critical">
+          <div class="insight-icon">⚡</div>
+          <div class="insight-body">
+            <div class="insight-title">Momentum Decay Detected</div>
+            <div class="insight-text">Reading habit shows 63% drop probability within 4 days. Trigger an anchor event now.</div>
+          </div>
+          <div class="insight-badge critical">CRITICAL</div>
+        </div>
+        <div class="insight-item insight-warn">
+          <div class="insight-icon">🔮</div>
+          <div class="insight-body">
+            <div class="insight-title">Weekend Pattern Disruption</div>
+            <div class="insight-text">Your Saturday routines historically collapse. AI recommends micro-habit substitution.</div>
+          </div>
+          <div class="insight-badge warn">WARNING</div>
+        </div>
+        <div class="insight-item insight-ok">
+          <div class="insight-icon">✦</div>
+          <div class="insight-body">
+            <div class="insight-title">Exercise Stack Forming</div>
+            <div class="insight-text">Morning run is approaching habit crystallization threshold at day 30.</div>
+          </div>
+          <div class="insight-badge ok">POSITIVE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI PREDICTOR FORM -->
+<section class="predict-section" id="predict">
+  <div class="predict-bg-line"></div>
+  <div class="section-header">
+    <span class="section-tag">// NEURAL ANALYSIS ENGINE</span>
+    <h2>AI Habit <span class="accent">Persistence Scan</span></h2>
+    <p>Feed the algorithm. Get your gravity score.</p>
+  </div>
+
+  <div class="predict-container">
+    <div class="predict-form">
+      <div class="form-group">
+        <label>Habit Name</label>
+        <input type="text" id="habitName" placeholder="e.g. Morning Meditation" class="form-input"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Frequency Target</label>
+          <select id="frequency" class="form-input">
+            <option>Daily</option>
+            <option>5x per week</option>
+            <option>3x per week</option>
+            <option>Weekly</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Current Streak (days)</label>
+          <input type="number" id="streak" placeholder="0" min="0" class="form-input"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Motivation Level</label>
+        <div class="slider-wrapper">
+          <input type="range" id="motivation" min="1" max="10" value="7" class="form-slider"/>
+          <div class="slider-labels">
+            <span>1 — Barely</span>
+            <span id="motivLabel">7</span>
+            <span>10 — Obsessed</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Biggest Challenge</label>
+        <div class="challenge-pills">
+          <button class="pill" data-val="time">⏰ No Time</button>
+          <button class="pill active" data-val="motivation">😴 Low Energy</button>
+          <button class="pill" data-val="consistency">🔄 Inconsistency</button>
+          <button class="pill" data-val="environment">🏠 Bad Environment</button>
+          <button class="pill" data-val="social">👥 Lack of Support</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Goal Importance to You</label>
+        <div class="slider-wrapper">
+          <input type="range" id="importance" min="1" max="10" value="8" class="form-slider"/>
+          <div class="slider-labels">
+            <span>1 — Meh</span>
+            <span id="importLabel">8</span>
+            <span>10 — Life-defining</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary btn-full" id="analyzeBtn" onclick="runAnalysis()">
+        <span id="btnText">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          Compute Gravity Score
+        </span>
+      </button>
+    </div>
+
+    <!-- Result Panel -->
+    <div class="result-panel" id="resultPanel">
+      <div class="result-idle">
+        <div class="idle-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="30" stroke="#ff2233" stroke-width="1" stroke-dasharray="6 4" opacity="0.4"/>
+            <circle cx="32" cy="32" r="20" stroke="#ff2233" stroke-width="1" opacity="0.2"/>
+            <circle cx="32" cy="32" r="6" fill="#ff2233" opacity="0.6"/>
+          </svg>
+        </div>
+        <p>Fill in the form and run your AI analysis to reveal your habit's gravitational fate.</p>
+      </div>
+      <div class="result-active" id="resultActive" style="display:none">
+        <div class="result-header">
+          <span class="result-tag">GRAVITY SCORE</span>
+          <div class="result-score-big" id="resultScore">—</div>
+          <div class="result-grade" id="resultGrade">—</div>
+        </div>
+        <div class="result-bars">
+          <div class="res-bar-item">
+            <span>Persistence Probability</span>
+            <div class="res-bar-track"><div class="res-bar-fill" id="barPersist"></div></div>
+            <span id="valPersist">—</span>
+          </div>
+          <div class="res-bar-item">
+            <span>Habit Crystallization</span>
+            <div class="res-bar-track"><div class="res-bar-fill" id="barCrystal"></div></div>
+            <span id="valCrystal">—</span>
+          </div>
+          <div class="res-bar-item">
+            <span>Drop-off Risk</span>
+            <div class="res-bar-track"><div class="res-bar-fill bar-red" id="barRisk"></div></div>
+            <span id="valRisk">—</span>
+          </div>
+        </div>
+        <div class="result-ai-text" id="aiText">
+          <span class="ai-label">⬡ AI ASSESSMENT</span>
+          <p id="aiMessage">—</p>
+        </div>
+        <div class="result-tactics" id="tacticsList">
+          <span class="ai-label">RECOMMENDED TACTICS</span>
+          <ul id="tacticsUl"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HABITS TABLE -->
+<section class="habits-section" id="habits">
+  <div class="section-header">
+    <span class="section-tag">// HABIT REGISTRY</span>
+    <h2>Your Active <span class="accent">Habit Stack</span></h2>
+  </div>
+  <div class="habits-table-wrapper">
+    <table class="habits-table">
+      <thead>
+        <tr>
+          <th>Habit</th>
+          <th>Category</th>
+          <th>Streak</th>
+          <th>Gravity Score</th>
+          <th>30-Day Forecast</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="habitsTableBody">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="insights">
+  <div class="section-header">
+    <span class="section-tag">// THE SCIENCE</span>
+    <h2>How Goal Gravity <span class="accent">Works</span></h2>
+  </div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-icon">🧠</div>
+      <h3>Neural Input Mapping</h3>
+      <p>Your habit parameters are fed into a multi-layer neural network trained on 50,000+ behavior patterns to identify key persistence signals.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-icon">📡</div>
+      <h3>Gravitational Force Modeling</h3>
+      <p>AI calculates the "gravitational pull" between your current behavior and your target habit — including friction forces and momentum vectors.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-icon">⚡</div>
+      <h3>Decay Probability Forecast</h3>
+      <p>Time-series modeling predicts the exact inflection points where habit momentum will drop — 7, 14, and 30-day horizons.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-icon">🎯</div>
+      <h3>Precision Interventions</h3>
+      <p>The AI delivers hyper-personalized micro-interventions timed to your individual decay curve — before the habit dies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">
+    <span class="logo-icon">⬡</span>
+    <span class="logo-text">GOAL<span class="accent">GRAVITY</span></span>
+  </div>
+  <p class="footer-tagline">AI-Powered Habit Persistence · Neural Behavior Analysis</p>
+  <p class="footer-copy">© 2025 GoalGravity — Built for AI Research & Academic Projects</p>
+</footer>
+
+<script src="js/particles.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
