@@ -1,0 +1,74 @@
+// Particle System
+(function () {
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animId;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = (Math.random() - 0.5) * 0.4;
+      this.radius = Math.random() * 1.5 + 0.3;
+      this.alpha = Math.random() * 0.4 + 0.1;
+      this.life = 0;
+      this.maxLife = Math.random() * 200 + 100;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.life++;
+      if (this.life > this.maxLife || this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+        this.reset();
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(224, 16, 32, ${this.alpha * (1 - this.life / this.maxLife) * 0.5})`;
+      ctx.fill();
+    }
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: 80 }, () => new Particle());
+    window.addEventListener('resize', resize);
+    animate();
+  }
+
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(224, 16, 32, ${0.06 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawConnections();
+    animId = requestAnimationFrame(animate);
+  }
+
+  init();
+})();
